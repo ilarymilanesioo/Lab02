@@ -1,5 +1,37 @@
-def carica_da_file(file_path):
+def carica_da_file(nome_file):
     """Carica le foto dal file, creando un nuovo anno ogni volta che compare per la prima volta"""
+    try:
+        album={} #anno:descrizione per foto
+        with open(nome_file,'r',encoding='utf-8') as file:
+            linee=file.readlines() #leggo riga per riga
+            if not linee: #se mancano righe album vuoto
+                return album
+            for riga in linee[1:]:
+                riga=riga.strip()
+                if not riga:
+                    continue
+                parti=riga.split(',')
+                if len(parti)<5:
+                    continue
+                codice = parti[0].strip()
+                titolo = parti[1].strip()
+                autore = parti[2].strip()
+                mese = int(parti[3].strip())
+                anno = int(parti[4].strip())
+
+                foto={
+                    "codice": codice,
+                    "titolo": titolo,
+                    "autore": autore,
+                    "mese": mese,
+                    "anno": anno,
+                }
+                if anno not in album:
+                    album[anno]=[]
+                album[anno].append(foto)
+            return album
+    except FileNotFoundError:
+        return None
     # TODO
 
 
